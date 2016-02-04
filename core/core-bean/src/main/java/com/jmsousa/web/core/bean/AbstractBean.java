@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * Main abstract class for beans
@@ -46,7 +47,7 @@ public abstract class AbstractBean
 
 			AbstractBean bean = (AbstractBean) obj;
 
-			if (bean.getEquality() == null) {
+			if (getEquality() == null || getEquality() == this) {
 				if (getId().equals(bean.getId())) {
 					return true;
 				}
@@ -79,11 +80,17 @@ public abstract class AbstractBean
 
 	@Override
 	public String toString() {
-		if (getEquality() == null) {
-			return getId().toString();
+		ToStringBuilder toStringBuilder = new ToStringBuilder(this);
+
+		Object equalityForKey = getEquality();
+
+		if (equalityForKey == null || equalityForKey == this) {
+			toStringBuilder.append(getId());
+		} else {
+			toStringBuilder.append(equalityForKey);
 		}
 
-		return getEquality().toString();
+		return toStringBuilder.toString();
 
 	}
 

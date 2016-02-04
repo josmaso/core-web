@@ -19,6 +19,10 @@ public class AbstractBeanTest {
 	private BeanTest1	beanTest1_2;
 	private BeanTest2	beanTest2_1;
 	private BeanTest2	beanTest2_2;
+	private BeanTest3	beanTest3_1;
+	private BeanTest3	beanTest3_2;
+	private BeanTest4	beanTest4_1;
+	private BeanTest4	beanTest4_2;
 
 	@Before
 	public void createBeanTest() {
@@ -45,10 +49,22 @@ public class AbstractBeanTest {
 		beanTest2_2.setCreationDate(new Date(1000));
 		beanTest2_2.fieldString = "Test string";
 		beanTest2_2.fieldList = Arrays.asList("item1", "item2");
+
+		beanTest3_1 = new BeanTest3();
+		beanTest3_1.setId(1L);
+
+		beanTest3_2 = new BeanTest3();
+		beanTest3_2.setId(1L);
+
+		beanTest4_1 = new BeanTest4();
+		beanTest4_1.setId(1L);
+
+		beanTest4_2 = new BeanTest4();
+		beanTest4_2.setId(1L);
 	}
 
 	@Test
-	public void equals() {
+	public void equalsTest() {
 
 		// Null object
 		Assert.assertFalse("Null object", beanTest1_1.equals(null));
@@ -68,6 +84,22 @@ public class AbstractBeanTest {
 
 		// Different objects, same field values
 		Assert.assertFalse("Different objects, same field values", beanTest1_1.equals(beanTest2_1));
+
+		// Same objects, equality = null
+		Assert.assertTrue("Same objects, equality = null", beanTest3_1.equals(beanTest3_2));
+
+		// Same objects, equality = this
+		Assert.assertTrue("Same objects, equality = this", beanTest4_1.equals(beanTest4_2));
+	}
+
+	@Test
+	public void toStringTest() {
+
+		Assert.assertNotNull(beanTest1_1.toString());
+		Assert.assertNotNull(beanTest2_1.toString());
+		Assert.assertNotNull(beanTest3_1.toString());
+		Assert.assertNotNull(beanTest4_1.toString());
+
 	}
 
 	private static class BeanTest1
@@ -87,6 +119,38 @@ public class AbstractBeanTest {
 	}
 
 	private static class BeanTest2
+		extends AbstractBean {
+
+		private static final long	serialVersionUID	= 1L;
+
+		private String				fieldString;
+
+		private List<String>		fieldList;
+
+		@Override
+		protected Object getEquality() {
+			return Arrays.asList(getId(), getCreationDate(), fieldString, fieldList);
+		}
+
+	}
+
+	private static class BeanTest3
+		extends AbstractBean {
+
+		private static final long	serialVersionUID	= 1L;
+
+		private String				fieldString;
+
+		private List<String>		fieldList;
+
+		@Override
+		protected Object getEquality() {
+			return this;
+		}
+
+	}
+
+	private static class BeanTest4
 		extends AbstractBean {
 
 		private static final long	serialVersionUID	= 1L;
